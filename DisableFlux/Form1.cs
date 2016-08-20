@@ -148,6 +148,8 @@ namespace FluxProcess
         private void OnTimedEvent(object source, ElapsedEventArgs e)
         {
             SendKeys.SendWait("%({END})");
+            timer.Stop();
+            timer.Start();
         }
 
         /* It checks the state of the app when listBox changes. */
