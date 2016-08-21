@@ -40,6 +40,15 @@ namespace FluxProcess
                 checkBox1.Checked = true;
             }
 
+            using (RegistryKey rkApp = Registry.LocalMachine.OpenSubKey("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", true))
+            {
+                string pathName = (string) rkApp.GetValue("DisableFlux");
+                if (pathName != null && !pathName.Equals(Application.ExecutablePath.ToString() + " --start-minimized"))
+                {
+                    rkApp.SetValue("DisableFlux", Application.ExecutablePath.ToString() + " --start-minimized");
+                }
+            }
+
             foreach (string processName in Properties.Settings.Default.ProgramsList)
             {
                 listBox1.Items.Add(processName);
