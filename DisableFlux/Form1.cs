@@ -104,39 +104,50 @@ namespace FluxProcess
 
         private void startWatch_EventArrived(object sender, EventArrivedEventArgs e)
         {
-            string processName = e.NewEvent.Properties["ProcessName"].Value.ToString();
-            e.NewEvent.Dispose();
-
-            if (listBox1.Items.IndexOf(processName) >= 0)
+            try
             {
-                if (runningCount == 0)
-                {
-                    SendKeys.SendWait("%({END})");
-                    timer.Start();
-                }
-                ++runningCount;
-            }
+                string processName = e.NewEvent.Properties["ProcessName"].Value.ToString();
 
+                if (listBox1.Items.IndexOf(processName) >= 0)
+                {
+                    if (runningCount == 0)
+                    {
+                        SendKeys.SendWait("%({END})");
+                        timer.Start();
+                    }
+                    ++runningCount;
+                }
+            }
+            finally
+            {
+                e.NewEvent.Dispose();
+            }
         }
 
         private void stopWatch_EventArrived(object sender, EventArrivedEventArgs e)
         {
-            string processName = e.NewEvent.Properties["ProcessName"].Value.ToString();
-            e.NewEvent.Dispose();
-
-            if (processName.IndexOf(".exe") == -1)
+            try
             {
-                processName += ".exe";
-            }
+                string processName = e.NewEvent.Properties["ProcessName"].Value.ToString();
 
-            if (listBox1.Items.IndexOf(processName) >= 0)
-            {
-                if (runningCount == 1)
+                if (processName.IndexOf(".exe") == -1)
                 {
-                    SendKeys.SendWait("%({END})");
-                    timer.Stop();
+                    processName += ".exe";
                 }
-                --runningCount;
+
+                if (listBox1.Items.IndexOf(processName) >= 0)
+                {
+                    if (runningCount == 1)
+                    {
+                        SendKeys.SendWait("%({END})");
+                        timer.Stop();
+                    }
+                    --runningCount;
+                }
+            }
+            finally
+            {
+                e.NewEvent.Dispose();
             }
         }
 
