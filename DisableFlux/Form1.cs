@@ -105,6 +105,7 @@ namespace FluxProcess
         private void startWatch_EventArrived(object sender, EventArrivedEventArgs e)
         {
             string processName = e.NewEvent.Properties["ProcessName"].Value.ToString();
+            e.NewEvent.Dispose();
 
             if (listBox1.Items.IndexOf(processName) >= 0)
             {
@@ -121,6 +122,8 @@ namespace FluxProcess
         private void stopWatch_EventArrived(object sender, EventArrivedEventArgs e)
         {
             string processName = e.NewEvent.Properties["ProcessName"].Value.ToString();
+            e.NewEvent.Dispose();
+
             if (processName.IndexOf(".exe") == -1)
             {
                 processName += ".exe";
