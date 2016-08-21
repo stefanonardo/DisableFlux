@@ -26,6 +26,7 @@ namespace FluxProcess
             if (args.Length > 0 && "--start-minimized".Equals(args[0]))
             {
                 WindowState = FormWindowState.Minimized;
+                ShowInTaskbar = false;
             }
         }
 
@@ -78,12 +79,15 @@ namespace FluxProcess
 
         private void buttonDelete_Click(object sender, EventArgs e)
         {
-            string curItem = listBox1.SelectedItem.ToString();
-            Properties.Settings.Default.ProgramsList.Remove(curItem);
-            Properties.Settings.Default.Save();
-            listBox1.Items.Remove(listBox1.SelectedItem);
+            if (listBox1.SelectedItem != null)
+            {
+                string curItem = listBox1.SelectedItem.ToString();
+                Properties.Settings.Default.ProgramsList.Remove(curItem);
+                Properties.Settings.Default.Save();
+                listBox1.Items.Remove(listBox1.SelectedItem);
 
-            OnChangedList(curItem, true);
+                OnChangedList(curItem, true);
+            }
         }
 
         /* It starts process watchers. */
@@ -225,6 +229,7 @@ namespace FluxProcess
         {
             Show();
             WindowState = FormWindowState.Normal;
+            ShowInTaskbar = false;
         }
 
         private void checkBox1_CheckedChanged(object sender, EventArgs e)
